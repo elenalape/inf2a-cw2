@@ -138,18 +138,18 @@ def process_statement (lx,wlist,fb):
                         
 # End of PART A.
 
-lx = Lexicon()
-lx.add("John","P")
-lx.add("Mary","P")
-lx.add("Mary","P")
-lx.add("like","T")
-print(lx.getAll("P"))
-print("------- QUESTION 2. -------")
-fb = FactBase()
-fb.addUnary("duck","John")
-fb.addBinary("love","John","Mary")
-print(fb.queryUnary("duck","John")) # returns True
-print(fb.queryBinary("love","Mary","John")) # returns False
-print("------- QUESTION 3. -------")
-#test_string = flies
-print(verb_stem("cats"))
+# lx = Lexicon()
+# lx.add("John","P")
+# lx.add("Mary","P")
+# lx.add("Mary","P")
+# lx.add("like","T")
+# print(lx.getAll("P"))
+# print("------- QUESTION 2. -------")
+# fb = FactBase()
+# fb.addUnary("duck","John")
+# fb.addBinary("love","John","Mary")
+# print(fb.queryUnary("duck","John")) # returns True
+# print(fb.queryBinary("love","Mary","John")) # returns False
+# print("------- QUESTION 3. -------")
+# #test_string = flies
+# print(verb_stem("cats"))

@@ -46,12 +46,12 @@ class FactBase:
         self.unary[pred] = [e1, e2]
 
     def queryUnary(self, pred, e1):
-        if self.unary.get(pred) == e1:
+        if self.unary[pred] == e1:
             return True
         return False
 
     def queryBinary(self, pred, e1, e2):
-        if e1 == self.unary.get(pred)[0] and e2 == self.unary.get(pred)[1]:
+        if e1 == self.unary[pred][0] and e2 == self.unary[pred][1]:
             return True
         else:
             return False

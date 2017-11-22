@@ -81,14 +81,48 @@ def noun_stem (s):
 def tag_word (lx,wd):
     """returns a list of all possible tags for wd relative to lx"""
     wd_tags = []
-    all_forms = [wd, verb_stem(wd), noun_stem(wd)]
-    all_tags = ['P', 'A', 'Ns', 'Np', 'Is', 'Ip', 'Ts', 'Tp', 'BEs', 'BEp', 'DOs', 'DOp', 'AR', 'AND', 'WHO', 'WHICH', '?']
-    for tag in all_tags:
-        for form in all_forms:
-            if form in lx.getAll(tag):
-                wd_tags.append(tag)
+    
+    # check for proper nouns
+    if wd in lx.getAll("P"):
+        if wd[0].isupper():
+            wd_tags.append("P")
+
+    # check for adjectives
+    if wd in lx.getAll("A"):
+        wd_tags.append("A")
+
+    # check for transitives
+    if wd in lx.getAll("T"):
+        if verb_stem(wd):
+            wd_tags.append("Ts")
+        else:
+            wd_tags.append("Tp")
+
+    # check for intransitives
+    if wd in lx.getAll("I"):
+        if verb_stem(wd):
+            wd_tags.append("Is")
+        else:
+            wd_tags.append("Ip")
+
+    # check for nouns
+    if wd in lx.getAll("N"):
+        if wd in unchanging_plurals_list:
+            wd_tags.append("Ns")
+            wd_tags.append("Np")
+        elif wd == noun_stem(wd):
+            wd_tags.append("Ns")
+        else:
+            wd_tags.append("Np")
+
+    # check for whether it's a function word
+
+    for tag in [p[1] for p in function_words_tags]:
+        if wd in lx.getAll(tag):
+            wd_tags.append(tag)
 
     return list(set(wd_tags))
+
 
 def tag_words (lx, wds):
     """returns a list of all possible taggings for a list of words"""
@@ -101,9 +135,15 @@ def tag_words (lx, wds):
 
 # End of PART B.
 #print unchanging_plurals()
-# lex = Lexicon()
-# lex.add("John","P")
-# lex.add("Mary","P")
-# lex.add("Mary","Ns")
-# lex.add("like","T")
-# print(tag_word(lex, "Mary"))
+lex = Lexicon()
+lex.add("takes","N")
+lex.add("fish","N")
+lex.add("rotate", "I")
+lex.add("fishes","T")
+lex.add("?", "?")
+print(tag_word(lex, "takes"))
+print(tag_word(lex, "fish"))
+print(tag_word(lex, "rotate"))
+print(tag_word(lex, "fishes"))
+print(tag_word(lex, "?"))
+#print(noun_stem("sdgfghhj"))

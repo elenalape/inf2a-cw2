@@ -27,7 +27,11 @@ class Lexicon:
 
     def getAll(self, cat):
         #set does not allow duplicates, so cast to set and then back to list
-        return list(set(self.lx.get(cat)))
+        #return list(set(self.lx.get(cat)))
+        if self.lx.has_key(cat):
+            return list(set(self.lx[cat]))
+        else:
+             return []
 
 class FactBase:
     """stores unary and binary relational facts"""
@@ -62,7 +66,7 @@ def verb_stem(s):
     is_verb = False
 
     for word, pos in nltk.corpus.brown.tagged_words():
-        if word == s and pos == "VBZ":
+        if word == s and (pos == "VBZ" or pos == "VB"):
             is_verb = True
             break
     
@@ -143,7 +147,7 @@ def process_statement (lx,wlist,fb):
 # lx.add("Mary","P")
 # lx.add("Mary","P")
 # lx.add("like","T")
-# print(lx.getAll("P"))
+# print(lx.getAll("Ps"))
 # print("------- QUESTION 2. -------")
 # fb = FactBase()
 # fb.addUnary("duck","John")
@@ -152,4 +156,4 @@ def process_statement (lx,wlist,fb):
 # print(fb.queryBinary("love","Mary","John")) # returns False
 # print("------- QUESTION 3. -------")
 # #test_string = flies
-# print(verb_stem("cats"))
+# print(verb_stem("go"))

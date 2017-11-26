@@ -142,7 +142,7 @@ def verb_stem_helper(s):
 
 def verb_stem(s):
     s_stem = verb_stem_helper(s)
-    if s_stem in vbz_verbs or s in vb_verbs:
+    if s_stem in vb_verbs or s in vbz_verbs:
         return s_stem
     return ''
 
@@ -198,5 +198,6 @@ def process_statement (lx,wlist,fb):
 # print(fb.queryBinary("love","Mary","John")) # returns False
 # print("------- QUESTION 3. -------")
 # #test_string = flies
-print(verb_stem("dresses"))
-print("dresses".endswith("sses"))
+#print(verb_stem("dresses"))
+#print("dresses".endswith("sses"))
+print(verb_stem("goes"))

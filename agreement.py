@@ -124,15 +124,15 @@ def V_phrase_num(tr):
         return tr[0][2]
 
     if tr.label() == "Rel":
-        # if tr[0] == "NP":
-        #     if V_phrase_num(tr[0]) == "s":
-        #         return "p"
-        #     return "s"
-        if tr[1].label() == "VP":
-            return V_phrase_num(tr[1])
+        if tr[0] == "NP":
+            if V_phrase_num(tr[0]) == "s":
+                return "p"
+            return "s"
+        # if tr[1].label() == "VP":
+        #     return V_phrase_num(tr[1])
 
     if tr.label() == "QP":
-        if tr.label(tr[0]) == "VP":
+        if tr[0].label() == "VP":
             return V_phrase_num(tr[0])
 
     return ""
@@ -154,10 +154,11 @@ def matches(n1,n2):
 def check_node(tr):
     """checks agreement constraints at the root of tr"""
     rule = top_level_rule(tr)
-    if (rule == 'S -> WHICH Nom QP QM'):
+
+    if rule == 'S -> WHICH Nom QP QM':
         return (matches (N_phrase_num(tr[1]), V_phrase_num(tr[2])))
     
-    if (rule == 'NP -> AR Nom'):
+    if rule == 'NP -> AR Nom':
         return (N_phrase_num(tr[1]) == 's')
     
     if rule == "QP -> DO NP T":
@@ -231,13 +232,13 @@ def restore_words(tr,wds):
 if __name__ == "__main__":
     #code for a simple testing, feel free to modify
     lx = Lexicon()
-    lx.add('John','P')
-    lx.add('like','T')
-    tr0 = all_valid_parses(lx, ['Who','likes','John','?'])[0]
-    tr = restore_words(tr0,['Who','likes','John','?'])
+    lx.add('duck','N')
+    lx.add('fly','I')
+    tr0 = all_valid_parses(lx, ['Which','ducks','fly','?'])[0]
+    tr = restore_words(tr0,['Which','ducks','fly','?'])
     print(str(tr0))
     print(str(tr))
-#tr.draw()
+    tr.draw()
 
 # End of PART C.
 

@@ -101,16 +101,16 @@ def tag_word (lx,wd):
     # check for transitives
     if wd in lx.getAll("T") or verb_stem(wd) in lx.getAll("T"):
         if verb_stem(wd):
-            wd_tags.append("Tp")
-        else:
             wd_tags.append("Ts")
+        else:
+            wd_tags.append("Tp")
 
     # check for intransitives
     if wd in lx.getAll("I") or verb_stem(wd) in lx.getAll("I"):
         if verb_stem(wd):
-            wd_tags.append("Ip")
-        else:
             wd_tags.append("Is")
+        else:
+            wd_tags.append("Ip")
 
     # check for nouns
     if wd in lx.getAll("N") or noun_stem(wd) in lx.getAll("N"):
@@ -134,16 +134,16 @@ def tag_words (lx, wds):
         return [[fst] + rst for fst in tag_first for rst in tag_rest]
 
 # End of PART B.
-# print unchanging_plurals()
-# lex = Lexicon()
-# lex.add("takes","N")
-# lex.add("fish","N")
-# lex.add("rotate", "I")
-# lex.add("fishes","T")
-# lex.add("?", "?")
-# print(tag_word(lex, "takes"))
-# print(tag_word(lex, "fish"))
-# print(tag_word(lex, "rotate"))
-# print(tag_word(lex, "fishes"))
-# print(tag_word(lex, "?"))
-# print(noun_stem("sdgfghhj"))
+print unchanging_plurals()
+lex = Lexicon()
+lex.add("likes","T")
+lex.add("fish","N")
+lex.add("rotate", "I")
+#lex.add("fishes","T")
+lex.add("?", "?")
+print(tag_word(lex, "likes"))
+print(tag_word(lex, "fish"))
+print(tag_word(lex, "rotate"))
+print(tag_word(lex, "fishes"))
+print(tag_word(lex, "?"))
+print(noun_stem("sdgfghhj"))

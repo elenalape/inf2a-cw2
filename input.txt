@@ -1,0 +1,5 @@
+One easy feature to implement would be adding the past simple tense to the grammar. We would need to check for irregular verbs, but since there are not many, this could be handled by a single function that would look them up in a list. The semantic rules would be very similar or even the same as for present simple.
+
+Another easy feature would be extending the grammar to have negation but only in the long form (e.g. “John does not run”, “John is not purple”, but not “John doesn’t run”). This is not hard to do by changing the grammar rules, e.g. for VP have “VP[x] -> BE[x] NOT A”.
+
+For “Does x do y” questions it would be fairly easy to lookup whether the lambda expression for do(x, y) exists and return a boolean. In this way, some Yes or No questions could be implemented.

@@ -26,8 +26,6 @@ class Lexicon:
             self.lx[cat] = [stem]
 
     def getAll(self, cat):
-        #set does not allow duplicates, so cast to set and then back to list
-        #return list(set(self.lx.get(cat)))
         if self.lx.has_key(cat):
             return list(set(self.lx[cat]))
         return []
@@ -35,47 +33,30 @@ class Lexicon:
 class FactBase:
     """stores unary and binary relational facts"""
     def __init__(self):
-        self.unaryFacts = []
-        self.binaryFacts = []
+        self.unary = {}
+        self.binary = {}
 
-    def addUnary(self, stem1, stem2):
-        self.unaryFacts.append((stem1, stem2))
+    def addUnary(self, pred, e1):
+        if pred not in self.unary.keys():
+            self.unary[pred] = []
+        self.unary[pred].append(e1)
 
-    def addBinary(self, stem1, stem2, stem3):
-        self.binaryFacts.append((stem1, stem2, stem3))
+    def addBinary(self, pred, e1, e2):
+        if pred not in self.binary.keys():
+            self.binary[pred] = []
+        self.binary[pred].append((e1, e2))
 
-    def queryUnary(self, stem1, stem2):
-        return (stem1, stem2) in self.unaryFacts
+    def queryUnary(self, pred, e1):
+        if pred in self.unary.keys():
+            if e1 in self.unary[pred]:
+                return True
+        return False
 
-    def queryBinary(self, stem1, stem2, stem3):
-        return (stem1, stem2, stem3) in self.binaryFacts
-    # def __init__(self):
-    #     self.unary = {}
-    #     self.binary = {}
-
-    # def addUnary(self, pred, e1):
-    #     if pred not in self.unary.keys():
-    #         self.unary[pred] = [e1]
-    #     else:
-    #         self.unary[pred].append(e1)
-
-    # def addBinary(self, pred, e1, e2):
-    #     if pred not in self.binary.keys():
-    #         self.binary[pred] = [(e1, e2)]
-    #     else:
-    #         self.binary[pred].append((e1, e2))
-
-    # def queryUnary(self, pred, e1):
-    #     if pred in self.unary.keys():
-    #         if e1 in self.unary[pred]:
-    #             return True
-    #     return False
-
-    # def queryBinary(self, pred, e1, e2):
-    #     if pred in self.binary.keys():
-    #         if (e1, e2) in self.binary[pred]:
-    #             return True
-    #     return False
+    def queryBinary(self, pred, e1, e2):
+        if pred in self.binary.keys():
+            if (e1, e2) in self.binary[pred]:
+                return True
+        return False
 
 
 import re
@@ -92,29 +73,9 @@ for word, pos in nltk.corpus.brown.tagged_words():
 
 def verb_stem_helper(s):
     """extracts the stem from the 3sg form of a verb, or returns empty string"""
-    
-    # is_verb = False
-
-    # for word, pos in nltk.corpus.brown.tagged_words():
-    #     if word == s and (pos == "VBZ" or pos == "VB"):
-    #         is_verb = True
-    #         break
-    
-    # if is_verb == False:
-    #     return ""
-
-    # for matching words like "likes, strikes" and not "flies"
     if re.match(r"^\w+[^iosxz]es$", s):
         if s[len(s)-1] + s[len(s)-2] != "ch" or s[len(s)-1] + s[len(s)-2] != "sh":
             return s[:len(s) - 1]
-
-    # special case for have
-    if re.match(r"has", s):
-        return "have"
-
-    #if not s.endswith("zzes") and not s.endswith("sses"):
-    #    if s.endswith("ses") or s.endswith("zes"):
-    #        return s[:len(s) - 1]
 
     if s.endswith("zzes") or s.endswith("sses"):
         return s[:len(s) - 2]
@@ -141,6 +102,10 @@ def verb_stem_helper(s):
     return ""
 
 def verb_stem(s):
+
+    if re.match(r"has", s):
+        return "have"
+
     s_stem = verb_stem_helper(s)
     if s_stem in vb_verbs or s in vbz_verbs:
         return s_stem
@@ -183,21 +148,3 @@ def process_statement (lx,wlist,fb):
     return msg
                         
 # End of PART A.
-
-# lx = Lexicon()
-# lx.add("John","P")
-# lx.add("Mary","P")
-# lx.add("Mary","P")
-# lx.add("like","T")
-# print(lx.getAll("Ps"))
-# print("------- QUESTION 2. -------")
-# fb = FactBase()
-# fb.addUnary("duck","John")
-# fb.addBinary("love","John","Mary")
-# print(fb.queryUnary("duck","John")) # returns True
-# print(fb.queryBinary("love","Mary","John")) # returns False
-# print("------- QUESTION 3. -------")
-# #test_string = flies
-#print(verb_stem("dresses"))
-#print("dresses".endswith("sses"))
-print(verb_stem("goes"))

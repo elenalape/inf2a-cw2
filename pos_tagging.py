@@ -134,16 +134,3 @@ def tag_words (lx, wds):
         return [[fst] + rst for fst in tag_first for rst in tag_rest]
 
 # End of PART B.
-print unchanging_plurals()
-lex = Lexicon()
-lex.add("likes","T")
-lex.add("fish","N")
-lex.add("rotate", "I")
-#lex.add("fishes","T")
-lex.add("?", "?")
-print(tag_word(lex, "likes"))
-print(tag_word(lex, "fish"))
-print(tag_word(lex, "rotate"))
-print(tag_word(lex, "fishes"))
-print(tag_word(lex, "?"))
-print(noun_stem("sdgfghhj"))

@@ -27,7 +27,6 @@ def sem(tr):
     
     if tr.label() == "T":
         return tr[0][0]
-        #return "(\\x.(\\y." + tr[0][0] + "(x, y)))"
 
     if tr.label() == "I":
         return "(\\x." + tr[0][0] + "(x))"

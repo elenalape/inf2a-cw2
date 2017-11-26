@@ -30,48 +30,78 @@ class Lexicon:
         #return list(set(self.lx.get(cat)))
         if self.lx.has_key(cat):
             return list(set(self.lx[cat]))
-        else:
-             return []
+        return []
 
 class FactBase:
     """stores unary and binary relational facts"""
     def __init__(self):
-        self.unary = {}
-        self.binary = {}
+        self.unaryFacts = []
+        self.binaryFacts = []
 
-    def addUnary(self, pred, e1):
-        self.unary[pred] = e1
+    def addUnary(self, stem1, stem2):
+        self.unaryFacts.append((stem1, stem2))
 
-    def addBinary(self, pred, e1, e2):
-        self.unary[pred] = [e1, e2]
+    def addBinary(self, stem1, stem2, stem3):
+        self.binaryFacts.append((stem1, stem2, stem3))
 
-    def queryUnary(self, pred, e1):
-        if self.unary[pred] == e1:
-            return True
-        return False
+    def queryUnary(self, stem1, stem2):
+        return (stem1, stem2) in self.unaryFacts
 
-    def queryBinary(self, pred, e1, e2):
-        if e1 == self.unary[pred][0] and e2 == self.unary[pred][1]:
-            return True
-        else:
-            return False
+    def queryBinary(self, stem1, stem2, stem3):
+        return (stem1, stem2, stem3) in self.binaryFacts
+    # def __init__(self):
+    #     self.unary = {}
+    #     self.binary = {}
+
+    # def addUnary(self, pred, e1):
+    #     if pred not in self.unary.keys():
+    #         self.unary[pred] = [e1]
+    #     else:
+    #         self.unary[pred].append(e1)
+
+    # def addBinary(self, pred, e1, e2):
+    #     if pred not in self.binary.keys():
+    #         self.binary[pred] = [(e1, e2)]
+    #     else:
+    #         self.binary[pred].append((e1, e2))
+
+    # def queryUnary(self, pred, e1):
+    #     if pred in self.unary.keys():
+    #         if e1 in self.unary[pred]:
+    #             return True
+    #     return False
+
+    # def queryBinary(self, pred, e1, e2):
+    #     if pred in self.binary.keys():
+    #         if (e1, e2) in self.binary[pred]:
+    #             return True
+    #     return False
 
 
 import re
 import nltk
-from nltk.corpus import brown 
-def verb_stem(s):
+from nltk.corpus import brown
+
+vbz_verbs = []
+vb_verbs = []
+for word, pos in nltk.corpus.brown.tagged_words():
+    if pos == "VBZ":
+        vbz_verbs.append(word)
+    elif pos == "VB":
+        vb_verbs.append(word)
+
+def verb_stem_helper(s):
     """extracts the stem from the 3sg form of a verb, or returns empty string"""
     
-    is_verb = False
+    # is_verb = False
 
-    for word, pos in nltk.corpus.brown.tagged_words():
-        if word == s and (pos == "VBZ" or pos == "VB"):
-            is_verb = True
-            break
+    # for word, pos in nltk.corpus.brown.tagged_words():
+    #     if word == s and (pos == "VBZ" or pos == "VB"):
+    #         is_verb = True
+    #         break
     
-    if is_verb == False:
-        return ""
+    # if is_verb == False:
+    #     return ""
 
     # for matching words like "likes, strikes" and not "flies"
     if re.match(r"^\w+[^iosxz]es$", s):
@@ -82,9 +112,15 @@ def verb_stem(s):
     if re.match(r"has", s):
         return "have"
 
-    if not s.endswith("zzes") and not s.endswith("sses"):
-        if s.endswith("ses") or s.endswith("zes"):
-            return s[:len(s) - 1]
+    #if not s.endswith("zzes") and not s.endswith("sses"):
+    #    if s.endswith("ses") or s.endswith("zes"):
+    #        return s[:len(s) - 1]
+
+    if s.endswith("zzes") or s.endswith("sses"):
+        return s[:len(s) - 2]
+
+    if s.endswith("ses") or s.endswith("zes"):
+        return s[:len(s) - 1]
 
     if re.match(r"^\w+(o|x|ch|sh|ss|zz)es$", s):
         return s[:len(s) - 2]
@@ -103,6 +139,12 @@ def verb_stem(s):
             return s[:len(s) - 1]
 
     return ""
+
+def verb_stem(s):
+    s_stem = verb_stem_helper(s)
+    if s_stem in vbz_verbs or s in vb_verbs:
+        return s_stem
+    return ''
 
 def add_proper_name (w,lx):
     """adds a name to a lexicon, checking if first letter is uppercase"""
@@ -156,4 +198,5 @@ def process_statement (lx,wlist,fb):
 # print(fb.queryBinary("love","Mary","John")) # returns False
 # print("------- QUESTION 3. -------")
 # #test_string = flies
-# print(verb_stem("go"))
+print(verb_stem("dresses"))
+print("dresses".endswith("sses"))

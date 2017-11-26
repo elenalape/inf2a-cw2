@@ -1,0 +1,7 @@
+{
+  "test_statements.py::test_processing": true, 
+  "test_statements.py::test_stemming_with_tagging": true, 
+  "test_tagging.py::test_function_words": true, 
+  "test_tagging.py::test_tag_words": true, 
+  "test_tagging.py::test_taging_with_trained_lexer": true
+}
